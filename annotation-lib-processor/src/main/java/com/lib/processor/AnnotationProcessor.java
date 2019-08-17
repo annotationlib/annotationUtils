@@ -3,7 +3,6 @@ package com.lib.processor;
 import com.lib.processor.annotation.CalendarContract;
 import com.lib.processor.annotation.SharePreferences;
 import com.lib.processor.factory.CalendarContractUtilFactory;
-import com.lib.processor.factory.CustomToastFactory;
 import com.lib.processor.factory.LocaleHelperFactory;
 import com.lib.processor.factory.SharePreferencesLoaderFactory;
 import com.lib.processor.factory.UtilsFactory;
@@ -56,9 +55,6 @@ public class AnnotationProcessor extends AbstractProcessor {
             }
             SharePreferencesLoaderFactory sharePreferencesLoaderFactory = new SharePreferencesLoaderFactory(processingEnv, filer);
             sharePreferencesLoaderFactory.processAnnotationSharePreferencesLoader(element);
-
-            CustomToastFactory customToastFactory = new CustomToastFactory(processingEnv, filer);
-            customToastFactory.processCustomToast();
 
             LocaleHelperFactory localeHelperFactory = new LocaleHelperFactory(processingEnv, filer);
             localeHelperFactory.processLocaleHelper();

@@ -34,9 +34,9 @@ class Constant {
     static TypeName cursor = ClassName.get("android.database", "Cursor");
 
     //Annotation
-    static ClassName nonNull = ClassName.get("android.support.annotation", "NonNull");
+    static ClassName nonNull = ClassName.get("androidx.annotation", "NonNull");
     static ClassName suppressLint = ClassName.get("android.annotation", "SuppressLint");
-    static ClassName requiresPermission = ClassName.get("android.support.annotation", "RequiresPermission");
+    static ClassName requiresPermission = ClassName.get("androidx.annotation", "RequiresPermission");
     static ClassName permission = ClassName.get("android.Manifest", "permission");
     static ClassName targetApi = ClassName.get("android.annotation", "TargetApi");
 

@@ -28,6 +28,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="Gradle: javapoet-1.10.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: gson-2.8.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: gson-2.8.5" level="project" />
   </component>
 </module>
