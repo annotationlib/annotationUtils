@@ -187,7 +187,7 @@ public class UtilsFactory {
                 //hideKeyword
                 .addMethod(MethodSpec.methodBuilder("hideKeyword")
                         .addParameter(view, "view")
-                        .addParameter(activity, "activity")
+                        .addParameter(activity, "activity",Modifier.FINAL)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .addCode(" // Set up touch listener for non-text box views to hide keyboard.\n" +
                                 "        if (!(view instanceof EditText)) {\n" +
