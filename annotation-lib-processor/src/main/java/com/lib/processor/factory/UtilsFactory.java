@@ -1,6 +1,7 @@
 package com.lib.processor.factory;
 
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
@@ -11,6 +12,7 @@ import java.io.InputStream;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -147,26 +149,28 @@ public class UtilsFactory {
                         .addJavadoc("@return\n")
                         .addJavadoc("@throws IOException\n")
                         .build())
+                .addField(FieldSpec.builder(TrustManager[].class, "trustAllCerts")
+                        .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
+                        .initializer("new $T[]{\n" +
+                                "          new $T() {\n" +
+                                "              @Override\n" +
+                                "              public void checkClientTrusted($T chain, String authType) throws $T {\n" +
+                                "              }\n" +
+                                "\n" +
+                                "              @Override\n" +
+                                "              public void checkServerTrusted($T chain, String authType) throws CertificateException {\n" +
+                                "              }\n" +
+                                "\n" +
+                                "              @Override\n" +
+                                "              public $T getAcceptedIssuers() {\n" +
+                                "                  return new $T{};\n" +
+                                "              }\n" +
+                                "          }\n" +
+                                "  };", TrustManager.class, X509TrustManager.class, X509Certificate[].class, CertificateException.class, X509Certificate[].class, X509Certificate[].class, X509Certificate[].class)
+                        .build())
                 //getSSLSocketFactory
                 .addMethod(MethodSpec.methodBuilder("getSSLSocketFactory")
-                        .addCode("$T[] trustAllCerts = new TrustManager[]{\n" +
-                                        "                new $T() {\n" +
-                                        "                    @Override\n" +
-                                        "                    public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws $T {\n" +
-                                        "                    }\n" +
-                                        "\n" +
-                                        "                    @Override\n" +
-                                        "                    public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {\n" +
-                                        "                    }\n" +
-                                        "\n" +
-                                        "                    @Override\n" +
-                                        "                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {\n" +
-                                        "                        return new java.security.cert.X509Certificate[]{};\n" +
-                                        "                    }\n" +
-                                        "                }\n" +
-                                        "        };\n" +
-                                        "\n" +
-                                        "        // Install the all-trusting trust manager\n" +
+                        .addCode(" // Install the all-trusting trust manager\n" +
                                         "        $T sslContext = null;\n" +
                                         "        try {\n" +
                                         "            sslContext = SSLContext.getInstance(\"SSL\");\n" +
@@ -177,9 +181,10 @@ public class UtilsFactory {
                                         "            e.printStackTrace();\n" +
                                         "        }\n" +
                                         "\n" +
+                                        "        SSLSocketFactory sslSocketFactory = null;\n" +
                                         "        // Create an ssl socket factory with our all-trusting manager\n" +
-                                        "        SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();\n" +
-                                        "        return sslSocketFactory;\n", TrustManager.class, X509TrustManager.class, CertificateException.class
+                                        "if(sslContext!=null) sslSocketFactory = sslContext.getSocketFactory();\n" +
+                                        "        return sslSocketFactory;\n"
                                 , SSLContext.class, NoSuchAlgorithmException.class, KeyManagementException.class)
                         .returns(SSLSocketFactory.class)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -187,7 +192,7 @@ public class UtilsFactory {
                 //hideKeyword
                 .addMethod(MethodSpec.methodBuilder("hideKeyword")
                         .addParameter(view, "view")
-                        .addParameter(activity, "activity",Modifier.FINAL)
+                        .addParameter(activity, "activity", Modifier.FINAL)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .addCode(" // Set up touch listener for non-text box views to hide keyboard.\n" +
                                 "        if (!(view instanceof EditText)) {\n" +
