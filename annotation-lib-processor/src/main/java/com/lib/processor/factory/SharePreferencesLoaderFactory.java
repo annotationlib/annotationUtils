@@ -34,8 +34,6 @@ public class SharePreferencesLoaderFactory {
         String packageName = Constant.PACKAGE_NAME;
 
         SharePreferences anno = element.getAnnotation(SharePreferences.class);
-        //name class
-        String nameShare = capitalizeWord(anno.preferencesName()).replaceAll(" ", "");
 
         //set class
         TypeSpec.Builder classGenerateBuilder = TypeSpec.classBuilder(nameClass)
@@ -43,7 +41,7 @@ public class SharePreferencesLoaderFactory {
         //set properties
         classGenerateBuilder.addField(FieldSpec.builder(Constant.sharedPreferences, "mPreferences", Modifier.PRIVATE, Modifier.STATIC).build())
                 .addField(FieldSpec.builder(TypeName.INT, "PREFERENCES_MODE", Modifier.PRIVATE).initializer(ClassName.get("android.app", "Activity.MODE_PRIVATE").toString()).build())
-                .addField(FieldSpec.builder(String.class, "PREFERENCES_NAME", Modifier.PRIVATE).initializer("$S", nameShare).build())
+                .addField(FieldSpec.builder(String.class, "PREFERENCES_NAME", Modifier.PRIVATE).initializer("$S", "").build())
                 .addField(FieldSpec.builder(Constant.context, "mContext", Modifier.PRIVATE).build())
                 .addField(FieldSpec.builder(ClassName.get(packageName, nameClass), "sharePreferencesLoader", Modifier.PRIVATE, Modifier.STATIC).build());
         //set constructor
@@ -93,6 +91,7 @@ public class SharePreferencesLoaderFactory {
                                 .returns(ClassName.get(packageName, nameClass))
                                 .addParameter(context)
                                 .addStatement("this.mContext = pContext.getApplicationContext()")
+                                .addStatement("this.PREFERENCES_NAME = mContext.getPackageName()")
                                 .addStatement(returnThis)
                                 .build())
                 .addMethod(MethodSpec.methodBuilder("setupPreferencesName")

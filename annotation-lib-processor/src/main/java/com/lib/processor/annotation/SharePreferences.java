@@ -13,6 +13,4 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
 @Documented
-public @interface SharePreferences {
-    String preferencesName();
-}
+public @interface SharePreferences{}
