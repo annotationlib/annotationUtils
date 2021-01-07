@@ -2,7 +2,7 @@ apply plugin: 'java-library'
 apply plugin: 'maven'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.squareup:javapoet:1.10.0'
-    compile 'com.google.code.gson:gson:2.8.5'
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    api 'com.squareup:javapoet:1.10.0'
+    api 'com.google.code.gson:gson:2.8.5'
 }

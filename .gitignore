@@ -2,3 +2,7 @@
 
 **/build
 /.idea/
+/annotationUtils.iml
+/gradlew
+/gradlew.bat
+/local.properties
